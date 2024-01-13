@@ -16,7 +16,7 @@ namespace EmailFlow.Controllers
         {
             _dbContext = dbContext;
         }
-        [HttpGet]
+        [HttpGet("GetAllMails")]
         public async Task<ActionResult<IEnumerable<PostMail>>> GetMails()
         {
             if(_dbContext.PostMails == null)

@@ -1,16 +1,28 @@
 using EmailFlow.Data;
+
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MailDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("MailString")));
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", builder =>
+    {
+        builder
+            .SetIsOriginAllowed(origin => origin == "http://localhost:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
 
 var app = builder.Build();
 
@@ -21,10 +33,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Enable CORS
+app.UseCors("MyCorsPolicy");
+
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

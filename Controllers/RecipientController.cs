@@ -1,4 +1,4 @@
-﻿using EmailFlow.Data;
+﻿ using EmailFlow.Data;
 using EmailFlow.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +18,7 @@ namespace EmailFlow.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("GetAllRecipients")]
         public async Task<ActionResult<IEnumerable<Recipient>>> GetRecipients()
         {
             if(_dbContext.Recipients == null)
