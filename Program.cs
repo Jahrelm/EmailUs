@@ -1,5 +1,5 @@
 using EmailFlow.Data;
-
+using EmailFlowApi.Data;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -11,6 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MailDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("MailString")));
+builder.Services.AddDbContext<AuthDbContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("AuthString")));
 
 builder.Services.AddCors(options =>
 {
