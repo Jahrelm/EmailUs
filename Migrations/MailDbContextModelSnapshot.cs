@@ -46,7 +46,7 @@ namespace EmailFlow.Migrations
 
                     b.HasKey("GroupID");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
                 });
 
             modelBuilder.Entity("EmailFlow.Models.PostMail", b =>
@@ -79,7 +79,7 @@ namespace EmailFlow.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("PostMails");
+                    b.ToTable("PostMails", (string)null);
                 });
 
             modelBuilder.Entity("EmailFlow.Models.Recipient", b =>
@@ -125,7 +125,7 @@ namespace EmailFlow.Migrations
 
                     b.HasIndex("GroupID");
 
-                    b.ToTable("Recipients");
+                    b.ToTable("Recipients", (string)null);
                 });
 
             modelBuilder.Entity("EmailFlow.Models.Recipient", b =>
