@@ -9,7 +9,7 @@ namespace EmailFlow.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class MailController : ControllerBase
-    {
+    { 
         private readonly MailDbContext _dbContext;
 
         public MailController(MailDbContext dbContext)

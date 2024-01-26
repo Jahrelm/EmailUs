@@ -1,5 +1,6 @@
 using EmailFlow.Data;
 using EmailFlowApi.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -11,8 +12,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MailDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("MailString")));
+
 builder.Services.AddDbContext<AuthDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("AuthString")));
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+    {
+        options.Password.RequiredLength = 5;
+
+    }).AddEntityFrameworkStores<AuthDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddCors(options =>
 {
