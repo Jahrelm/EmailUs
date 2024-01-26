@@ -1,4 +1,6 @@
 ﻿using EmailFlowApi.Models;
+using EmailFlowApi.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,8 +10,9 @@ namespace EmailFlowApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public AuthController() 
-        { 
+        private readonly IAuthService authService;
+        public AuthController(IAuthenticationService authService) 
+        {  
 
 
         }
