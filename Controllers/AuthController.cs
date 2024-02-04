@@ -1,8 +1,7 @@
-﻿using EmailFlowApi.Models;
-using EmailFlowApi.Services;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
+﻿using EmailFlowApi.Data;
+using EmailFlowApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 namespace EmailFlowApi.Controllers
 {
@@ -10,25 +9,46 @@ namespace EmailFlowApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService authService;
-        public AuthController(IAuthenticationService authService) 
-        {  
+        private readonly UserManager<IdentityUser> _userManager;
 
+        private readonly AuthDbContext _dbContext;
 
-        }
-        
-      
-        [HttpPost]
-
-        public async Task<bool> RegisterUser(Login user)
+        public AuthController(UserManager<IdentityUser> userManager, AuthDbContext dbContext) 
         {
-
+            _userManager = userManager;
+            _dbContext = dbContext;
         }
-      
-        [HttpGet]
-        public async Task Login(Login user)
-        {
 
+        [HttpPost("signup")]
+        public async Task<ActionResult> SignUp([FromBody] User model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = new IdentityUser
+            {
+                UserName = model.Email,  
+                Email = model.Email
+            };
+
+           
+            var result = await _userManager.CreateAsync(user, model.Password);
+            _dbContext.Add(model);
+            await _dbContext.SaveChangesAsync();
+
+            
+
+            if (result.Succeeded)
+            {
+                return Ok(new { message = "User created successfully" });
+            }
+            else
+            {
+                // Return the errors if the creation failed
+                return BadRequest(result.Errors);
+            }
         }
     }
 }

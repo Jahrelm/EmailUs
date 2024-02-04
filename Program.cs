@@ -1,8 +1,8 @@
 using EmailFlow.Data;
 using EmailFlowApi.Data;
+using EmailFlowApi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,17 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<MailDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("MailString")));
 
 builder.Services.AddDbContext<AuthDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("AuthString")));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
-    {
-        options.Password.RequiredLength = 5;
-
-    }).AddEntityFrameworkStores<AuthDbContext>()
+// Add Identity services and configure them to use the AuthDbContext
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddCors(options =>
@@ -48,7 +47,11 @@ if (app.Environment.IsDevelopment())
 app.UseCors("MyCorsPolicy");
 
 app.UseHttpsRedirection();
+
+// Use authentication and authorization middleware
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
